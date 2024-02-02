@@ -14,10 +14,22 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
+import net.sf.jasperreports.view.JasperViewer;
+
 
 /**
  *
@@ -76,6 +88,7 @@ public class Menu extends javax.swing.JFrame {
         spnFechaMes = new javax.swing.JSpinner();
         spnFechaAno = new javax.swing.JSpinner();
         btnReset = new javax.swing.JButton();
+        btnListarFactura = new javax.swing.JButton();
         mbaMenu = new javax.swing.JMenuBar();
         menAcciones = new javax.swing.JMenu();
         mitAnadir = new javax.swing.JMenuItem();
@@ -167,6 +180,13 @@ public class Menu extends javax.swing.JFrame {
         btnReset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnResetActionPerformed(evt);
+            }
+        });
+
+        btnListarFactura.setText(bundle.getString("Menu.btnListarFactura.text")); // NOI18N
+        btnListarFactura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListarFacturaActionPerformed(evt);
             }
         });
 
@@ -282,7 +302,9 @@ public class Menu extends javax.swing.JFrame {
                                             .addComponent(lblEu)))))
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(btnReset))
+                                .addComponent(btnReset)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnListarFactura))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(281, 281, 281)
                                 .addComponent(lblSinFacturas)))
@@ -316,7 +338,9 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(lblTipo1)
                     .addComponent(cmbCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                .addComponent(btnReset)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnReset)
+                    .addComponent(btnListarFactura))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -575,7 +599,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_mitEditarActionPerformed
 
     private void mitEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mitEliminarActionPerformed
-        if(txfId.getText().isEmpty()){
+            if(txfId.getText().isEmpty()){
             JOptionPane.showConfirmDialog(this, "Selecciona una factura de la tabla",">:(",JOptionPane.PLAIN_MESSAGE);
             return;
         }
@@ -633,6 +657,27 @@ public class Menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cmbTipoItemStateChanged
 
+    private void btnListarFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListarFacturaActionPerformed
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistence");
+        FacturaJpaController controller = new FacturaJpaController(emf);
+        leerInformeBD(controller.findFacturaEntities());
+    }//GEN-LAST:event_btnListarFacturaActionPerformed
+
+    public static void leerInformeBD(List<Factura>lista){
+        try {
+            JasperPrint print;
+            HashMap param = new HashMap();
+            JRDataSource datasource = new JRBeanArrayDataSource(lista.toArray());
+
+            String report = "src/main/java/es/torredelrey/gestorfacturas/vista/listadoFacturas.jasper";
+            print = JasperFillManager.fillReport(report, param,datasource);
+            JasperExportManager.exportReportToPdfFile(print,"informeFactura.pdf");
+            JasperViewer.viewReport(print);
+        } catch (JRException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+    }
+    
     private void actualizaUi(){
         //PREPARACION DE DATOS DE ENTRADA
         txfId.setText(""); //Solo visual, lo asigna la bd
@@ -799,6 +844,7 @@ public class Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnListarFactura;
     private javax.swing.JButton btnReset;
     private javax.swing.JComboBox<String> cmbCliente;
     private javax.swing.JComboBox<String> cmbTipo;
