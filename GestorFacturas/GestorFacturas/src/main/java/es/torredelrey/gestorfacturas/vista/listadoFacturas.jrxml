@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="listadoFacturas" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8fb2ce44-e4cb-4f8c-8f7b-cddaa285aae6">
 	<property name="ireport.zoom" value="1.4641000000000062"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="584"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
 	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
@@ -31,7 +31,7 @@
 		<band height="802" splitType="Stretch">
 			<image scaleImage="FillFrame">
 				<reportElement x="0" y="0" width="595" height="802" uuid="0cf35c72-0d52-4d52-8355-bebabfaca4ee"/>
-				<imageExpression><![CDATA["C:\\Users\\Maria\\Downloads\\aa.png"]]></imageExpression>
+				<imageExpression><![CDATA["src\\main\\resources\\img\\aa.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="55" y="158" width="106" height="20" forecolor="#90B4FC" uuid="ebf053d6-94d8-4122-b8b9-2150081d913d"/>
